@@ -31,5 +31,13 @@ RSpec.describe StringCalculator do
         expect(calculator.add('8, 5, 1, 2, 3, 5, 4, 7')).to eq(35)
       end
     end
+
+    context 'when the input is having new lines between numbers string' do
+      it 'should return the sum of numbers' do
+        expect(calculator.add('1\n2, 3')).to eq(6)
+        expect(calculator.add('8\n5 \n 2')).to eq(15)
+        expect(calculator.add('8, 5\n1, 2, 3\n 5, 4 \n7')).to eq(35)
+      end
+    end
   end
 end
