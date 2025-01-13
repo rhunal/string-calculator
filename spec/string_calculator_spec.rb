@@ -39,5 +39,12 @@ RSpec.describe StringCalculator do
         expect(calculator.add('8, 5\n1, 2, 3\n 5, 4 \n7')).to eq(35)
       end
     end
+
+    context 'when the input is having different delimiters betwen numbers string' do
+      it 'should return the sum of numbers' do
+        expect(calculator.add('//;\n1;2')).to eq(3)
+        expect(calculator.add("//;\n1;2,3\n4")).to eq(10)
+      end
+    end
   end
 end
