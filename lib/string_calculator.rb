@@ -9,7 +9,6 @@ class StringCalculator
     split_regex = delimiters.any? ? Regexp.union(delimiters) : /[,\n;]/
     number_list = numbers_part.split(split_regex).map(&:to_i)
 
-    # Validate and process numbers
     validate_no_negatives(number_list)
     number_list.reject { |num| num > 1000 }.sum
   end
