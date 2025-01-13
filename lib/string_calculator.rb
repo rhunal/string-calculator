@@ -1,25 +1,34 @@
 class StringCalculator
   def add(numbers)
-    # Extract the custom delimiter
-    delimiters = numbers.scan(%r{\[(.*?)\]}).flatten
+    return 0 if numbers.empty?
 
-    number_list = if delimiters.any?
-      # Create a regular expression to split by multiple delimiters
-      delimiter_regex = Regexp.union(delimiters)
+    delimiters = extract_delimiters(numbers)
+    numbers_part = extract_numbers_part(numbers, delimiters.any?)
 
-      # Extract the numbers part of the string
-      numbers_part = numbers.split("\n", 2)[1]
-      numbers_part.split(delimiter_regex)
-    else
-      # Convert escaped newline, split by delimiters, and convert to integers
-      numbers.gsub('\\n', "\n").split(/[,\n;]/)
-    end.map(&:to_i)
-    negative_numbers = number_list.select(&:negative?)
+    # Create a regex for splitting numbers
+    split_regex = delimiters.any? ? Regexp.union(delimiters) : /[,\n;]/
+    number_list = numbers_part.split(split_regex).map(&:to_i)
 
-    raise "negative numbers not allowed: #{negative_numbers.join(', ')}" unless negative_numbers.empty?
+    # Validate and process numbers
+    validate_no_negatives(number_list)
+    number_list.reject { |num| num > 1000 }.sum
+  end
 
-    numbers_bigger_than_thousand = number_list.select { |num| num > 1000 }
-    number_list -= numbers_bigger_than_thousand unless numbers_bigger_than_thousand.empty?
-    number_list.sum
+  private
+
+  # Extract custom delimiters from the input string
+  def extract_delimiters(numbers)
+    numbers.scan(%r{\[(.*?)\]}).flatten
+  end
+
+  # Extract the numbers part of the input string
+  def extract_numbers_part(numbers, has_custom_delimiters)
+    has_custom_delimiters ? numbers.split("\n", 2)[1] : numbers.gsub('\\n', "\n")
+  end
+
+  # Validate and raise an error if negative numbers are present
+  def validate_no_negatives(number_list)
+    negatives = number_list.select(&:negative?)
+    raise "negative numbers not allowed: #{negatives.join(', ')}" unless negatives.empty?
   end
 end
