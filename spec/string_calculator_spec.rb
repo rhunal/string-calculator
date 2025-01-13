@@ -58,5 +58,12 @@ RSpec.describe StringCalculator do
         end.to raise_error('negative numbers not allowed: -2, -3, -7, -8, -9')
       end
     end
+
+    context 'when the input contains numbers bigger than 1000' do
+      it 'should ignore numbers bigger than 1000 and return the sum of valid numbers' do
+        expect(calculator.add('1,1000')).to eq(1001)
+        expect(calculator.add('1,1001')).to eq(1)
+      end
+    end
   end
 end

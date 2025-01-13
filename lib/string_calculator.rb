@@ -6,6 +6,8 @@ class StringCalculator
 
     raise "negative numbers not allowed: #{negative_numbers.join(', ')}" unless negative_numbers.empty?
 
+    numbers_bigger_than_thousand = number_list.select { |num| num > 1000 }
+    number_list -= numbers_bigger_than_thousand unless numbers_bigger_than_thousand.empty?
     number_list.sum
   end
 end
