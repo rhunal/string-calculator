@@ -1,7 +1,16 @@
 class StringCalculator
   def add(numbers)
-    # Convert escaped newline, split by delimiters, and convert to integers
-    number_list = numbers.gsub('\\n', "\n").split(/[,\n;]/).map(&:to_i)
+    # Extract the custom delimiter
+    custom_delimiter = numbers.scan(%r{//\[(.*?)\]}).flatten[0]
+
+    number_list = if custom_delimiter
+      # Extract the numbers part of the string
+      numbers_part = numbers.split("\n", 2)[1]
+      numbers_part.split(custom_delimiter)
+    else
+      # Convert escaped newline, split by delimiters, and convert to integers
+      numbers.gsub('\\n', "\n").split(/[,\n;]/)
+    end.map(&:to_i)
     negative_numbers = number_list.select(&:negative?)
 
     raise "negative numbers not allowed: #{negative_numbers.join(', ')}" unless negative_numbers.empty?
