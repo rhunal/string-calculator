@@ -67,8 +67,20 @@ RSpec.describe StringCalculator do
     end
 
     context 'when the input contains custom delimiters of any length' do
-      it 'should handle a multi-character custom delimiter' do
+      it 'should return the sum of numbers' do
         expect(calculator.add("//[***]\n1***2***3")).to eq(6)
+      end
+    end
+
+    context "when the input contains multiple delimiters like '//[delim1][delim2]\n'" do
+      it 'should return the sum of numbers' do
+        expect(calculator.add("//[*][%]\n1*2%3")).to eq(6)
+      end
+    end
+
+    context "when the input contains multiple delimiters of any length" do
+      it 'should return the sum of numbers' do
+        expect(calculator.add("//[***][%%]\n1***2%%3")).to eq(6)
       end
     end
   end

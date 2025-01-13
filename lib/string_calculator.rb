@@ -1,12 +1,15 @@
 class StringCalculator
   def add(numbers)
     # Extract the custom delimiter
-    custom_delimiter = numbers.scan(%r{//\[(.*?)\]}).flatten[0]
+    delimiters = numbers.scan(%r{\[(.*?)\]}).flatten
 
-    number_list = if custom_delimiter
+    number_list = if delimiters.any?
+      # Create a regular expression to split by multiple delimiters
+      delimiter_regex = Regexp.union(delimiters)
+
       # Extract the numbers part of the string
       numbers_part = numbers.split("\n", 2)[1]
-      numbers_part.split(custom_delimiter)
+      numbers_part.split(delimiter_regex)
     else
       # Convert escaped newline, split by delimiters, and convert to integers
       numbers.gsub('\\n', "\n").split(/[,\n;]/)
